@@ -55,6 +55,11 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        PathtoPublish: Infrastructure
+        ArtifactName: Infrastructure
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Install terraform version $(terraformVersion)
       inputs:

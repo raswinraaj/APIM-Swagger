@@ -13,18 +13,44 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  terraformVersion : '1.1.5'
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - job: BuildCode
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: NuGetToolInstaller@1
 
-steps:
-- task: NuGetToolInstaller@1
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+  - job: BuildInfrastructure
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+      displayName: Install terraform version $(terraformVersion)
+      inputs:
+        terraformVersion: $(terraformVersion)
+    - task: TerraformCLI@0
+      displayName: terraform init
+      inputs:
+        command: init
+        commandOptions: -backend=false
+        workingDirectory: '$(Build.SourcesDirectory)\Infrastructure'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
+    - task: TerraformCLI@0
+      displayName: terraform validate
+      inputs:
+        command: validate
+        workingDirectory: '$(Build.SourcesDirectory)\Infrastructure'

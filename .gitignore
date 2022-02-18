@@ -2,3 +2,9 @@
 api/.vs
 api/bin
 api/obj
+
+
+#Terraform
+.terraform*
+*.tfplan
+*.tfstate*

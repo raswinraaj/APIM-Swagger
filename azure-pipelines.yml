@@ -22,18 +22,35 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
-    - task: NuGetToolInstaller@1
 
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
       inputs:
-        restoreSolution: '$(solution)'
-
-    - task: VSBuild@1
+        command: restore      
+        projects: '**/*.csproj'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Build Solution'
       inputs:
-        solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
+        projects: $(solution)
+        arguments: ' --no-restore --configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Run Publish'
+      inputs:
+        projects: 'src/**/${{ parameters.PublishProject }}.csproj'
+        command: publish
+        publishWebProjects: false
+        zipAfterPublish: true
+        arguments: ' --no-build --configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)'
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Build Artifacts
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))  
+    
   - job: BuildInfrastructure
     pool:
       vmImage: 'windows-latest'

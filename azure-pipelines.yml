@@ -85,6 +85,10 @@ stages:
     variables:
     - group: terraform-vars    
     steps:
+    - checkout: none
+    - download: current
+      displayName: Download infrastructure
+      artifact: Infrastructure
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Install terraform version $(terraformVersion)
       inputs:

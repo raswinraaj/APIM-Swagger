@@ -112,6 +112,6 @@ stages:
         command: plan
         environmentServiceName: $(serviceconnection)
         workingDirectory: $(Pipeline.Workspace)/Infrastructure  
-        publishPlanResults: 'infrastructure-${{ parameters.environment }}'
+        publishPlanResults: 'infrastructure'
         commandOptions: >
           -out=changes.tfplan -var-file=terraform.tfvars                 

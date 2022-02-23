@@ -76,3 +76,42 @@ stages:
       inputs:
         command: validate
         workingDirectory: '$(Build.SourcesDirectory)\Infrastructure'
+- stage: Deploy
+  displayName: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+    - group: terraform-vars    
+    steps:
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+      displayName: Install terraform version $(terraformVersion)
+      inputs:
+        terraformVersion: $(terraformVersion)      
+
+    - task: DownloadSecureFile@1
+      displayName: DownloadSecureFile
+      inputs:
+        secureFile: 'terraform.tfvars'
+        retryCount: 5
+    - task: TerraformCLI@0
+      displayName: terraform init
+      inputs:
+        command: init
+        workingDirectory: $(Pipeline.Workspace)/Infrastructure              
+        backendType: 'azurerm'
+        backendServiceArm: $(serviceconnection)
+        backendAzureRmResourceGroupName: $(storage_account_resource_group_name)
+        backendAzureRmStorageAccountName: $(storage_account_name)
+        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmKey: 'apim.terraform.tfstate' 
+    - task: TerraformCLI@0
+      displayName: terraform plan
+      inputs:
+        command: plan
+        environmentServiceName: $(serviceconnection)
+        workingDirectory: $(Pipeline.Workspace)/Infrastructure  
+        publishPlanResults: 'infrastructure-${{ parameters.environment }}'
+        commandOptions: >
+          -out=changes.tfplan -var-file=terraform.tfvars                 

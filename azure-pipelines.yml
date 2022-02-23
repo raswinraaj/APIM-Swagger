@@ -119,4 +119,4 @@ stages:
         workingDirectory: $(Pipeline.Workspace)/Infrastructure  
         publishPlanResults: 'infrastructure'
         commandOptions: >
-          -out=changes.tfplan -var-file=terraform.tfvars                 
+          -out=changes.tfplan -var-file=$(DownloadSecureFile.secureFilePath)    

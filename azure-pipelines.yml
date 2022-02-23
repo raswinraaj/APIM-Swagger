@@ -101,7 +101,7 @@ stages:
         command: init
         workingDirectory: $(Pipeline.Workspace)/Infrastructure              
         backendType: 'azurerm'
-        backendServiceArm: $(serviceconnection)
+        backendServiceArm: 'vs-subscription'
         backendAzureRmResourceGroupName: $(storage_account_resource_group_name)
         backendAzureRmStorageAccountName: $(storage_account_name)
         backendAzureRmContainerName: 'tfstate'
@@ -110,7 +110,7 @@ stages:
       displayName: terraform plan
       inputs:
         command: plan
-        environmentServiceName: $(serviceconnection)
+        environmentServiceName: 'vs-subscription'
         workingDirectory: $(Pipeline.Workspace)/Infrastructure  
         publishPlanResults: 'infrastructure'
         commandOptions: >

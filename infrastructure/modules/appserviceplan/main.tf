@@ -1,5 +1,5 @@
 resource "azurerm_app_service_plan" "main" {
-  name                = var.appsvcplan_name
+  name                = "plan-app-${var.suffix}"
   location            = var.location
   resource_group_name = var.resource_group_name
   kind                = var.appsvcplan_kind
@@ -10,4 +10,3 @@ resource "azurerm_app_service_plan" "main" {
   }
   tags = var.common_tags
 }
-

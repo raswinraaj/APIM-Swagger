@@ -32,10 +32,6 @@ variable "appsvcplan_kind" {
   default= "Windows"
 }
 
-variable "appsvcplan_name" {
-  description = "Name of the app serivce plan"
-}
-
 variable "common_tags" {
   type = map(string)
   default = {}

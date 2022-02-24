@@ -90,6 +90,9 @@ stages:
     - download: current
       displayName: Download infrastructure
       artifact: Infrastructure
+    - download: current
+      displayName: Download DeploymentPackage
+      artifact: drop  
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Install terraform version $(terraformVersion)
       inputs:
@@ -119,4 +122,5 @@ stages:
         workingDirectory: $(Pipeline.Workspace)/Infrastructure  
         publishPlanResults: 'infrastructure'
         commandOptions: >
-          -out=changes.tfplan -var-file=$(DownloadSecureFile.secureFilePath)    
+          -out=changes.tfplan -var-file=$(DownloadSecureFile.secureFilePath) 
+          -var "deployment_package_path=$(Pipeline.Workspace)/drop/api.zip"   

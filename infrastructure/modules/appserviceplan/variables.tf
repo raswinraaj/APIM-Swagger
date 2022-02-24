@@ -11,28 +11,28 @@ variable "suffix" {
 }
 
 variable "appsvcplan_sku_tier" {
-  type = string
+  type        = string
   description = "Size of the app service plan Eg: Standard, Premium"
-  default = "Basic"
+  default     = "Basic"
 }
 
 variable "appsvcplan_sku_size" {
-  type = string
+  type        = string
   description = "Size of the app service plan Eg: S1,S2"
-  default = "B1"
+  default     = "B1"
 }
 
-variable "appsvcplan_sku_capacity" {  
+variable "appsvcplan_sku_capacity" {
   description = "Count of number of instances for the app service plan Eg: 1,2"
-  default = 1
+  default     = 1
 }
 
 variable "appsvcplan_kind" {
   description = "Windows or Dynamic"
-  default= "Windows"
+  default     = "Windows"
 }
 
 variable "common_tags" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }

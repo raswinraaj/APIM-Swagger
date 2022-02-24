@@ -20,7 +20,7 @@ variable "suffix" {
 }
 
 variable "resourcegroup_name" {
-  type = string
+  type    = string
   default = "apim-demo-rg"
 }
 
@@ -30,6 +30,7 @@ variable "location" {
 }
 
 variable "common_tags" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }
+variable "deployment_package_path" {}

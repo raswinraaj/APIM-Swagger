@@ -34,3 +34,6 @@ variable "common_tags" {
   default = {}
 }
 variable "deployment_package_path" {}
+variable "publisher_email" {
+  default = "test@gmail.com"
+}

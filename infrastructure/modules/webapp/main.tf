@@ -61,20 +61,14 @@ resource "azurerm_app_service" "swagger_demo_app" {
   location            = var.location
   resource_group_name = var.resource_group_name
   app_service_plan_id = var.app_service_plan_id
-  name                = "swagger-${var.suffix}"
-  version             = "~3"
+  name                = "swagger-${var.suffix}"  
   tags                = var.common_tags
-
-
-  storage_connection_string = azurerm_storage_account.swagger_demo_app.primary_connection_string
-
   app_settings = {
     dotnet_framework_version = "v4.0"
     http2_enabled            = true
     min_tls_version          = "1.2"
     WEBSITE_RUN_FROM_PACKAGE = "https://${azurerm_storage_blob.package.storage_account_name}.blob.core.windows.net/${azurerm_storage_blob.package.storage_container_name}/${azurerm_storage_blob.package.name}${data.azurerm_storage_account_sas.package.sas}"
   }
-
   site_config {
     use_32_bit_worker_process = false
     http2_enabled             = true

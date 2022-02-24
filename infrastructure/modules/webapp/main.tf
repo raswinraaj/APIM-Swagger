@@ -1,11 +1,7 @@
-resource "random_id" "swagger_demo_app" {
-  byte_length = 3
-}
-
 resource "azurerm_storage_account" "swagger_demo_app" {
   location                 = var.location
   resource_group_name      = var.resource_group_name
-  name                     = "${var.suffix}webapp${random_id.swagger_demo_app.hex}"
+  name                     = "st${var.suffix}webapp"
   account_kind             = "Storage"
   account_replication_type = "LRS"
   account_tier             = "Standard"
@@ -20,7 +16,7 @@ resource "azurerm_storage_container" "storage_container" {
 resource "azurerm_storage_blob" "package" {
   storage_account_name   = azurerm_storage_account.swagger_demo_app.name
   storage_container_name = azurerm_storage_container.storage_container.name
-  name                   = "${var.suffix}-swagger-service-deployment-package-${filesha256(var.deployment_package_path)}.zip"
+  name                   = "${var.suffix}-swagger-api-${filesha256(var.deployment_package_path)}.zip"
   type                   = "Block"
   source                 = var.deployment_package_path
 }

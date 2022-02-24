@@ -125,7 +125,8 @@ stages:
         publishPlanResults: 'infrastructure'
         commandOptions: >
           -out=changes.tfplan -var-file=$(DownloadSecureFile.secureFilePath) 
-          -var "deployment_package_path=$(Pipeline.Workspace)/drop/api.zip"   
+          -var "deployment_package_path=$(Pipeline.Workspace)/drop/api.zip"      
+          -var publisher_email=$(publisher_email)   
                      
     - task: TerraformCLI@0
       displayName: terraform apply

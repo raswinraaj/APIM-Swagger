@@ -40,7 +40,6 @@ module "apim" {
 
 data "http" "swagger" {
   url = "https://${module.appservice.default_site_hostname}/swagger/v1/swagger.json"
-
   request_headers = {
     Accept = "application/json"
   }
@@ -61,7 +60,7 @@ resource "azurerm_api_management_api" "swaggerdemoapi" {
 
   subscription_required = true
   import {
-    content_format = var.swagger_content_format
+    content_format = "openapi+json"
     content_value  = data.http.swagger.body
   }
   subscription_key_parameter_names {

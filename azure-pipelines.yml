@@ -53,6 +53,8 @@ stages:
       condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))  
     
   - job: BuildInfrastructure
+    dependsOn:
+      - BuildCode
     pool:
       vmImage: 'windows-latest'
     steps:
@@ -124,3 +126,12 @@ stages:
         commandOptions: >
           -out=changes.tfplan -var-file=$(DownloadSecureFile.secureFilePath) 
           -var "deployment_package_path=$(Pipeline.Workspace)/drop/api.zip"   
+                     
+    - task: TerraformCLI@0
+      displayName: terraform apply
+      inputs:
+        command: apply
+        environmentServiceName: 'vs-subscription'
+        workingDirectory: $(Pipeline.Workspace)/Infrastructure                
+        commandOptions: >
+          changes.tfplan      

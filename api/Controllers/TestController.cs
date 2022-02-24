@@ -20,4 +20,22 @@ namespace NetCore3WebAPI.Controllers
             });
         }
     }
+    [Route("api/Hello")]
+    [ApiController]
+    public class HelloController : ControllerBase
+    {
+        /// <summary>
+        /// This is a simple Get Method
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return await Task.Run(() =>
+            {
+                return Ok("Hello!");
+            });
+        }
+    }
+
 }

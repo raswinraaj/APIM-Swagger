@@ -10,5 +10,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:NetCore3WebAPI.Controllers.HelloController.Get">
+            <summary>
+            This is a simple Get Method
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

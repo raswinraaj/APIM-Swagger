@@ -12,9 +12,14 @@ resource "azurerm_storage_account" "swagger_demo_app" {
   tags                     = var.common_tags
 }
 
+resource "azurerm_storage_container" "storage_container" {  
+  name                  = "package"
+  storage_account_name  = azurerm_storage_account.swagger_demo_app.name
+  container_access_type = "private"
+}
 resource "azurerm_storage_blob" "package" {
   storage_account_name   = azurerm_storage_account.swagger_demo_app.name
-  storage_container_name = "package"
+  storage_container_name = azurerm_storage_container.storage_container.name
   name                   = "${var.suffix}-swagger-service-deployment-package-${filesha256(var.deployment_package_path)}.zip"
   type                   = "Block"
   source                 = var.deployment_package_path

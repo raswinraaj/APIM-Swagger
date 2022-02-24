@@ -1,5 +1,5 @@
 resource "azurerm_api_management" "apimgmt" {
-  name                = "apim-${var.suffix}"
+  name                = "apim-swagger-${var.suffix}"
   location            = var.location
   resource_group_name = var.resource_group_name
   publisher_name      = "Test Publisher"
